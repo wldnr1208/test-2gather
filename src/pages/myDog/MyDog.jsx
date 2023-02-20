@@ -12,8 +12,12 @@ const MyDog = () => {
   //임시 작동 안됨
   const [people, setPeople] = useState({});
   const fetchList = async () => {
-    const { data } = await axios.get(`${process.env.REACT_APP_DOG}/people/dog/${id}`);
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_DOG}/people/dog/${id}`
+    );
     console.log(data);
+    console.log(data);
+
     setPeople(data);
   };
 
