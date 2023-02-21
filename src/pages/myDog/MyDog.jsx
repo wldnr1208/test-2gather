@@ -17,7 +17,7 @@ const MyDog = () => {
     );
     console.log(data);
     console.log(data);
-
+    console.log(data);
     setPeople(data);
   };
 
