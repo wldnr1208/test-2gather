@@ -17,7 +17,7 @@ function WelcomePage() {
         <StH1>
           인근의 <span>강아지 친구와 매칭</span>되어
           <br /> <br />
-          <span>산책도, 교류도</span> 해요!
+          <span>산책도, 교류도</span> 해요!!
         </StH1>
         <StBtn onClick={() => navigate("/login")}>시작하기</StBtn>
       </StContainer>
