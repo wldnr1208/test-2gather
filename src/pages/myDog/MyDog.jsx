@@ -3,22 +3,35 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import MainHeader from "../../shared/MainHeader";
 import axios from "axios";
+import EditDog from "./editDog/EditDog";
 
 const MyDog = () => {
   const [edit, setEdit] = useState(false);
-  const navigate = useNavigate();
   const { id } = useParams();
+  const Authorization = sessionStorage.getItem("accessToken");
+  const navigate = useNavigate();
+  const [dog, setDog] = useState({});
+  const [images, setImages] = useState([]);
 
-  //임시 작동 안됨
-  const [people, setPeople] = useState({});
   const fetchList = async () => {
-    const { data } = await axios.get(
-      `${process.env.REACT_APP_DOG}/people/dog/${id}`
-    );
-    console.log(data);
-    console.log(data);
-    console.log(data);
-    setPeople(data);
+    const { data } = await axios.get(`${process.env.REACT_APP_DOG}/dogs/${id}`, {
+      headers: {
+        Authorization,
+      },
+    });
+    setDog(data);
+    setImages(data.images);
+    console.log(images);
+  };
+
+  const onDeleteDog = () => {
+    axios.delete(`${process.env.REACT_APP_DOG}/dogs/${id}`, {
+      headers: {
+        Authorization,
+      },
+    });
+    alert("성공적으로 삭제되었습니다!");
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -30,15 +43,34 @@ const MyDog = () => {
       <MainHeader />
       <Container>
         {!edit ? (
-          <div>
-            <StPeople style={{ backgroundImage: `url(${people.url})` }}>
-              <StName>{people.name}</StName>
-            </StPeople>
-            <div></div>
-          </div>
+          <StBefore>
+            <StBox>이름</StBox>
+            <br />
+            <StName>{dog.dogName}</StName>
+            <Space />
+            <StBox>성별</StBox>
+            <br />
+            <StName>{dog.dogSex}</StName>
+            <Space />
+            <StBox>사진</StBox>
+            <br />
+            <div>
+              {images.map((image) => (
+                <div key={image.id}>
+                  <StPeople style={{ backgroundImage: `url(${image.imageUrl})` }} />
+                </div>
+              ))}
+            </div>
+            <br />
+            <StBtnGroup>
+              {/* 아직 페이지 수정 안함 */}
+              {/* <button onClick={() => setEdit(true)}>변경</button> */}
+              <button onClick={() => onDeleteDog()}>삭제</button>
+            </StBtnGroup>
+          </StBefore>
         ) : (
           <div>
-            <div>바이</div>
+            <EditDog />
           </div>
         )}
       </Container>
@@ -57,8 +89,27 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const StBefore = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 6vh;
+  height: 3vh;
+  margin-top: 2vh;
+  margin-bottom: 1vh;
+  background: #ffffff;
+  border: 1px solid #4269b4;
+  border-radius: 20px;
+`;
+
 const StPeople = styled.div`
-  margin-left: 20px;
   position: relative;
   width: 100px;
   padding: 30px;
@@ -71,8 +122,16 @@ const StPeople = styled.div`
 `;
 
 const StName = styled.h3`
-  position: absolute;
   font-size: large;
-  bottom: 10px;
-  color: white;
+  color: black;
+`;
+
+const Space = styled.div`
+  height: 4vh;
+`;
+
+const StBtnGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

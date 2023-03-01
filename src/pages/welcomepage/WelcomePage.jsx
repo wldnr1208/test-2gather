@@ -1,60 +1,94 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
+import StartLayout from "../../components/StartLayout";
+import welecome from "../../assets/img/welecome.jpg";
+import whitetogather from "../../assets/img/whitetogather.png";
 function WelcomePage() {
   const navigate = useNavigate();
 
   return (
-    <Stimg>
+    <StartLayout>
       <StContainer>
-        <p>근처의 강아지 친구와 교류하며 산책도 같이해요!</p>
-        <button onClick={() => navigate("/login")}>시작하기</button>
+        <StP1>
+          우리 강아지의 <span>산책 매칭</span>
+        </StP1>
+        <StImg src={whitetogather} />
+        <StH1>
+          인근의 <span>강아지 친구와 매칭</span>되어
+          <br /> <br />
+          <span>산책도, 교류도</span> 해요!
+        </StH1>
+        <StBtn onClick={() => navigate("/login")}>시작하기</StBtn>
       </StContainer>
-    </Stimg>
+    </StartLayout>
   );
 }
-
 export default WelcomePage;
-const Stimg = styled.div`
-  background-image: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0.5)
-    ),
-    url("http://res.heraldm.com/phpwas/restmb_allidxmake.php?idx=5&simg=201902211639012219160_20190221164308_01.jpg");
-  background-position: center 30%;
-  background-size: cover;
-`;
 
 const StContainer = styled.div`
-  height: 80vh;
+  position: fixed;
+  width: 375px;
+  background-color: transparent;
+  border: 1px solid #ecf3ff;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  p {
-    font-size: 116px;
-    font-weight: 800;
-    color: white;
-    margin: 0 0 20px 0;
-    @media screen and (max-width: 985px) {
-      font-size: 70px;
-    }
-    @media screen and (max-width: 595px) {
-      font-size: 50px;
-    }
+  margin: 0 auto;
+  height: 812px;
+  background-image: url(${welecome});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 30px;
+`;
+const StP1 = styled.p`
+  width: 200px;
+  height: 23px;
+  max-width: 375px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  margin-top: 58px;
+  span {
+    font-size: 16px;
+    font-weight: 600;
   }
-  button {
-    font-size: 19px;
-    font-weight: 700;
-    border: none;
-    width: 260px;
-    height: 44px;
-    border-radius: 30px;
-    background: linear-gradient(to right, #eeeeee, #656463);
-    opacity: 0.8;
-    color: white;
-    cursor: pointer;
+
+  &::first-child {
+    font-weight: 100;
   }
+`;
+const StImg = styled.img`
+  width: 196.65px;
+  height: 107.16px;
+
+  margin-bottom: 308px;
+`;
+
+const StH1 = styled.h1`
+  width: 100%;
+  max-width: 375px;
+  height: 23px;
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 185px;
+`;
+const StBtn = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 100px;
+  gap: 10px;
+
+  width: 267px;
+  height: 46px;
+  background: #2f58ac;
+  border-radius: 60px;
+  color: #ffffff;
 `;

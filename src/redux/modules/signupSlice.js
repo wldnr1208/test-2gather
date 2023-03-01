@@ -6,10 +6,10 @@ axios.defaults.withCredentials = true;
 const initialState = {
   dogInfo: [
     {
-      dogname: "",
-      dogsex: "",
-      dogimages: "",
-      dogdetails: "",
+      dogName: "",
+      dogSex: "",
+      imgFile: "",
+      dogDetails: "",
     },
   ],
   isLoading: false,
@@ -18,18 +18,32 @@ const initialState = {
 };
 
 //강아지 정보입력 post 요청
-
 export const __postDog = createAsyncThunk(
   "signup",
   async (payload, thunkAPI) => {
+    console.log(payload);
+    const Authorization = sessionStorage.getItem("accessToken");
+
+    const frm = new FormData();
+
+    Object.values(payload.images).forEach((file) => frm.append("images", file));
+    frm.append("dogName", payload.dogName);
+    frm.append("dogSex", payload.dogSex);
+    frm.append("dogDetails", payload.dogDetails);
+
     try {
-      console.log(payload);
-      const { data } = await axios.post("https://midcon.shop/dogs", payload, {
-        //폼데이터로 보내야해서 바꿔줌
+      console.log(Authorization);
+      var config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://midcon.shop/dogs",
         headers: {
+          Authorization: Authorization,
           "Content-Type": "multipart/form-data",
         },
-      });
+        data: frm,
+      };
+      const { data } = await axios(config);
       console.log(data);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
@@ -38,25 +52,25 @@ export const __postDog = createAsyncThunk(
   }
 );
 
-const userList = createSlice({
-  name: "userList",
+const dogInfo = createSlice({
+  name: "dogInfo",
   initialState,
   reducers: {},
   extraReducers: {
-    //post
     [__postDog.pending]: (state) => {
-      //보내는 도중, 진행중
+      state.isSuccess = false;
       state.isLoading = true;
     },
     [__postDog.fulfilled]: (state, action) => {
-      //연결후
+      state.isSuccess = true;
       state.isLoading = false;
-      alert("가입이 완료 되셨습니다!");
+      console.log(action.meta.arg);
+      state.posts.push(action.payload);
     },
     [__postDog.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-    }, //post
+    },
   },
 });
-export default userList.reducer;
+export default dogInfo.reducer;

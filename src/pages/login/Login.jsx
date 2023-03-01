@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __postLogin } from "../../redux/modules/userSlice";
 import { KAKAO_AUTH_URL } from "../../shared/OAuth";
+import smlogo from "../../assets/img/smlogo.png";
+import StartLayout from "../../components/StartLayout";
 
 function Login() {
   const navigate = useNavigate();
@@ -21,7 +23,6 @@ function Login() {
 
   //로그인 체크 전역변수 불러오기
   const loginCheck = useSelector((state) => state.userList.isLogin);
-  console.log(loginCheck);
 
   //로그인 핸들러
   const onChangeLoginHandler = (e) => {
@@ -38,164 +39,189 @@ function Login() {
   };
 
   useEffect(() => {
-    loginCheck && navigate("/dogsignup");
+    loginCheck && navigate("/selectpage");
   }, [loginCheck, navigate]);
 
   return (
-    <Container>
-      <Wrapper>
-        <LoginBox>
-          <TopBox>
-            <div>간편하게 로그인하고</div>
-            <div>투개더를 이용해보세요</div>
-          </TopBox>
-
-          <StInput
-            required
-            type="text"
-            name="email"
-            placeholder="이메일을 입력하세요"
-            onChange={onChangeLoginHandler}
-          ></StInput>
-          <StInput
-            required
-            type="password"
-            name="password"
-            placeholder="패스워드를 입력하세요"
-            onChange={onChangeLoginHandler}
-          ></StInput>
+    <StartLayout>
+      <Container>
+        <StLogo src={smlogo} />
+        <form>
+          <StDiv>
+            <StThinText>간편하게 로그인하고</StThinText>
+            <br />
+            <StBoldText>투개더를 이용해보세요</StBoldText>
+          </StDiv>
+          <div>
+            <StEmBox>
+              <StEmText>이메일</StEmText>
+              <StInput
+                required
+                type="text"
+                name="email"
+                placeholder="이메일을 입력하세요"
+                onChange={onChangeLoginHandler}
+              ></StInput>
+            </StEmBox>
+            <StPwBox>
+              <StEmText>비밀번호</StEmText>
+              <StInput
+                required
+                type="password"
+                name="password"
+                placeholder="패스워드를 입력하세요"
+                onChange={onChangeLoginHandler}
+              ></StInput>
+            </StPwBox>
+          </div>
           <LogInBtn onClick={onSubmitLoginHandler}>로그인</LogInBtn>
-        </LoginBox>
-        <Separator>
-          <div></div>
-          <span>Or</span>
-          <div></div>
-        </Separator>
-        <KakaoSignIn>
-          <a href={KAKAO_AUTH_URL}> 카카오로그인 </a>
-        </KakaoSignIn>
+        </form>
+
         <SignUpBtn
           onClick={() => {
             navigate("/signup");
           }}
         >
-          회원가입
+          회 원 가 입
         </SignUpBtn>
-      </Wrapper>
-    </Container>
+        <KakaoSignIn>
+          <a href={KAKAO_AUTH_URL}> 카카오로그인 </a>
+        </KakaoSignIn>
+      </Container>
+    </StartLayout>
   );
 }
 
 export default Login;
 
 const Container = styled.div`
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 100px;
+  width: 375px;
+  height: 812px;
+  border-radius: 30px;
 `;
-const WhiteBox = styled.div`
-  background-color: white;
-  border: 1px solid rgb(219, 219, 219);
-  border-radius: 10px;
+const StLogo = styled.img`
+  width: 196.65px;
+  height: 107.16px;
+  margin-left: 83px;
+  margin-top: 41px;
 `;
-const TopBox = styled(WhiteBox)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 35px 40px 25px 40px;
-  margin-bottom: 10px;
+const StDiv = styled.div`
+  width: 260px;
+  height: 70px;
+  margin-left: 55px;
+  margin-top: 23.84px;
+  text-align: center;
+`;
+const StEmBox = styled.div`
+  width: 259px;
+  height: 52px;
+  margin-left: 57px;
+  margin-top: 66px;
+`;
 
-  h1 {
-    color: #333333;
-  }
-  button {
-    border: none;
-    width: 130px;
-    height: 30px;
-    border-radius: 10px;
-    background-color: gray;
-    color: white;
-    font-weight: 800;
-    font-size: 15px;
-    cursor: pointer;
-  }
+const StPwBox = styled.div`
+  width: 259px;
+  height: 52px;
+  margin-left: 57px;
+  margin-top: 22px;
+  margin-bottom: 112px;
 `;
-const Wrapper = styled.div`
-  max-width: 350px;
-  width: 100%;
+const StEmText = styled.p`
+  width: 100px;
+  height: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
 `;
-const Separator = styled.div`
-  margin: 10px 0px 30px 0px;
-  margin-top: 10px;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  div {
-    width: 100%;
-    height: 2px;
-    background-color: rgb(219, 219, 219);
-  }
-  span {
-    margin: 0px 10px;
-    color: #8e8e8e;
-    font-weight: 600;
-  }
+const StThinText = styled.p`
+  font-weight: 300;
+  font-size: 24px;
+`;
+
+const StBoldText = styled.p`
+  font-weight: 600;
+  font-size: 24px;
 `;
 const SignUpBtn = styled.button`
-  border: none;
-  border-radius: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 100px;
+  gap: 10px;
+
+  height: 46px;
+  width: 285px;
+  margin-left: 48px;
   margin-top: 12px;
-  background-color: gray;
-  color: white;
+  background: #1c3467;
+  border-radius: 60px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
   text-align: center;
-  padding: 8px 0px;
-  font-weight: 600;
-  width: 100%;
-  opacity: gray;
+  color: #ffffff;
+  margin-bottom: 61.5px;
 `;
 const LogInBtn = styled.button`
-  border: none;
-  border-radius: 50px;
-  margin-top: 12px;
-  background-color: gray;
-  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 100px;
+  gap: 10px;
+  height: 46px;
+  width: 285px;
+  margin-left: 48px;
+
+  /* Main/main */
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
   text-align: center;
-  padding: 8px 0px;
-  font-weight: 600;
-  width: 100%;
-  opacity: gray;
+
+  color: #ffffff;
+  background: #2f58ac;
+  border-radius: 60px;
 `;
 const KakaoSignIn = styled.button`
-  border: none;
-  border-radius: 50px;
-  margin-top: 12px;
-  background-color: gray;
-  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 100px;
+  gap: 10px;
+  height: 46px;
+  width: 285px;
+  margin-left: 48px;
+
+  /* Main/main */
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 23px;
   text-align: center;
-  padding: 8px 0px;
-  font-weight: 600;
-  width: 100%;
-  opacity: gray;
+
+  background: #fee500;
+  border-radius: 60px;
 `;
 const StInput = styled.input`
-  width: 100%;
-  border-radius: 3px;
-  padding: 7px;
-  background-color: #fafafa;
-  border: 0.5px solid;
-  margin-top: 10px;
+  margin-top: 6px;
+  width: 259px;
+  height: 26px;
+  background-color: white;
   box-sizing: border-box;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-bottom-style: 1px;
   &::placeholder {
+    width: 138px;
+    height: 17px;
+    font-weight: 500;
     font-size: 12px;
+    line-height: 17px;
     &:focus {
       border-color: rgb(38, 38, 38);
     }
   }
 `;
-const LoginBox = styled.form``;

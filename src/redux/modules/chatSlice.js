@@ -53,17 +53,14 @@ export const addChatroom = createAsyncThunk(
   "post/chatroom",
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://jossiya.shop/api/rooms",
-        payload,
-        {
-          headers: {
-            contentType: "application/json",
-            authorization: accessToken,
-            "refresh-Token": refreshToken,
-          },
-        }
-      );
+      const response = await axios.post("/chat/room", payload, {
+        headers: {
+          contentType: "application/json",
+          authorization: accessToken,
+          "refresh-Token": refreshToken,
+        },
+      });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -98,13 +95,14 @@ export const getChatRoom = createAsyncThunk(
   "get/chatroom",
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://jossiya.shop/api/rooms", {
+      const response = await axios.get("/chat/rooms", {
         headers: {
           contentType: "application/json",
           authorization: accessToken,
           "refresh-Token": refreshToken,
         },
       });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

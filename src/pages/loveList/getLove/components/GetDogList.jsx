@@ -8,16 +8,21 @@ const InfiniteScroll = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
+  const Authorization = sessionStorage.getItem("accessToken");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await axios.get(`http://localhost:3001/userList`);
-    // setData((prevData) => [...prevData, ...res.data]);
-    setData(res.data);
+    const { data } = await axios.get(`${process.env.REACT_APP_DOG}/loves/received`, {
+      headers: {
+        Authorization,
+      },
+    });
+    // setData((prevData) => [...prevData, ...data]);
+    setData(data);
     console.log(data);
     setLoading(false);
-    setHasMore(res.data.length !== 0);
-    if (res.data.length !== 0) {
+    setHasMore(data.length !== 0);
+    if (data.length !== 0) {
       setPage((num) => num + 1);
     }
   }, []);
@@ -42,33 +47,68 @@ const InfiniteScroll = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const remainingData = data.slice(0, page * 4);
+  const sliceData = data.slice(0, page * 3);
+
+  //chatroom 으로 가야하는지 좋아요로 가야하는지?
+  const onSubmitHandler = (id) => {
+    axios.post(`${process.env.REACT_APP_DOG}/chat/room`, id, {
+      headers: {
+        Authorization,
+      },
+    });
+  };
+  const onRejectHandler = (id) => {
+    axios.post(`${process.env.REACT_APP_DOG}//match/reject/${id}`, {
+      headers: {
+        Authorization,
+      },
+    });
+  };
 
   return (
-    <>
-      <Container>
-        <StOnePage>
-          {remainingData.map((why, id) => {
-            if (id % 2 === 0) {
-              const group = remainingData.slice(id, id + 2);
-              return (
-                <OneDog key={id}>
-                  {group.map(({ url, name }) => (
-                    <StDog style={{ backgroundImage: `url(${url})` }} key={name}>
-                      <StName>{name}</StName>
+    <Container>
+      <StOnePage>
+        {sliceData.map((why, id) => {
+          if (id % 2 === 0) {
+            const group = sliceData.slice(id, id + 2);
+            return (
+              <OneDog key={id}>
+                {group.map(({ imageUrl, dogName, userId, dogSex }) => (
+                  <Stgroup>
+                    <StDog style={{ backgroundImage: `url(${imageUrl})` }} key={userId}>
+                      {dogSex === "female" ? (
+                        <StName> {dogName} (여)</StName>
+                      ) : (
+                        <StName> {dogName} (남)</StName>
+                      )}
                     </StDog>
-                  ))}
-                </OneDog>
-              );
-            }
-            return null;
-          })}
-          {loading && <div>Loading...</div>}
-          {!loading && !hasMore && <div>더이상 가져올 데이터가 없습니다 ㅠㅠ</div>}
-          <div ref={observer} />
-        </StOnePage>
-      </Container>
-    </>
+                    <br />
+                    <div>
+                      <button
+                        onClick={() => {
+                          onSubmitHandler(id);
+                        }}
+                      >
+                        수락
+                      </button>
+                      <button
+                        onClick={() => {
+                          onRejectHandler(id);
+                        }}
+                      >
+                        거절
+                      </button>
+                    </div>
+                  </Stgroup>
+                ))}
+              </OneDog>
+            );
+          }
+          return null;
+        })}
+        <div ref={observer} />
+      </StOnePage>
+    </Container>
   );
 };
 
@@ -82,16 +122,21 @@ const StOnePage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+`;
+
+const Stgroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const StDog = styled.div`
   position: relative;
-  width: 400px;
+  width: 14vh;
+  height: 20vh;
   padding: 10px;
   margin: 10px 10px 10px 10px;
-  max-width: 45vw;
-  height: 45vh;
   border-radius: 20px;
   background-size: cover;
   background-position: center;
@@ -102,12 +147,13 @@ const StName = styled.h3`
   position: absolute;
   font-size: medium;
   bottom: 30px;
-  color: beige;
+  background-color: black;
+  color: #ffffff;
 `;
 
 const OneDog = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  width: 50%;
+  width: 80vh;
 `;

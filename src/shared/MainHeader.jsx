@@ -1,39 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import PersonIcon from "@mui/icons-material/Person";
-import ForumIcon from "@mui/icons-material/Forum";
-import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useNavigate } from "react-router-dom";
+import ArrowIcon from "../assets/img/ArrowIcon.png";
+// import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useNavigate } from "react-router";
 
-function Header() {
+function Header({ title }) {
   const navigate = useNavigate();
+
+  const handleHistory = () => {
+    navigate(-1);
+  };
 
   return (
     <StHeader>
-      <IconButton
-        onClick={() => {
-          navigate("/editUser");
-        }}
-      >
-        <PersonIcon className="header_logo" fontSize="large" />
-      </IconButton>
-      <IconButton>
-        <img
-          className="logo"
-          src="https://image.rocketpunch.com/company/88741/tinder_logo_1546049672.png?s=400x400&t=inside"
-          onClick={() => {
-            navigate("/");
-          }}
-        />
-      </IconButton>
-      <IconButton
-        onClick={() => {
-          navigate("/giveLove");
-        }}
-      >
-        <FavoriteIcon className="header_logo" fontSize="large" />
-      </IconButton>
+      <StImg src={ArrowIcon} onClick={handleHistory} />
+      <StDiv style={{ fontSize: "20px", fontWeight: "bold" }}>{title}</StDiv>
     </StHeader>
   );
 }
@@ -41,19 +22,25 @@ function Header() {
 export default Header;
 
 const StHeader = styled.div`
-  /* display to row */
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+
+  justify-content: flex-start;
+
   align-items: center;
-  border-bottom: 1px solid #f9f9f9;
-  .PersonIcon {
-    /* size: 10%; */
-  }
-  .logo {
-    height: 70px;
-    object-fit: contain;
-  }
-  .header_logo {
-    padding: 20px;
-  }
+  width: 371px;
+  height: 60px;
+  margin-left: 20px;
+  margin-top: 24px;
+`;
+const StImg = styled.img`
+  width: 24px;
+  height: 24px;
+  padding-right: 120px;
+`;
+
+const StDiv = styled.div`
+  width: 371px;
+  height: 24px;
+  margin-left: 100px;
 `;

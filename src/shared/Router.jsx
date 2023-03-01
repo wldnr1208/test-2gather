@@ -7,38 +7,53 @@ import GiveLove from "../pages/loveList/giveLove/GiveLove";
 import GetLove from "../pages/loveList/getLove/GetLove";
 import DogSignUp from "../pages/dogSignup/DogSignUp";
 import ChattingList from "../pages/chattingList/ChattingList";
-import AddDog from "../pages/addDog/AddDog";
-import EditDog from "../pages/editDog/EditDog";
-import EditUser from "../pages/editUser/EditUser";
+import EditUser from "../pages/myPage/MyPage";
 import MyDog from "../pages/myDog/MyDog";
 import Kakao from "../pages/kakaoLogin/kakao";
 import ChatRoom from "../pages/chatting/ChatRoom";
 import WelcomePage from "../pages/welcomepage/WelcomePage";
-import ChatWindow from "../pages/chatting/ChatWindow";
 import ChattingDetail from "../pages/chatting/ChattingDetail";
-import Address from "../pages/dogSignup/Address";
+import EditNick from "../pages/myPage/components/eachForm/EditNick";
+import EditPsw from "../pages/myPage/components/eachForm/EditPsw";
+import AddDog from "../pages/myPage/components/eachForm/AddDog";
+import SelectPage from "../pages/selectPage/SelectPage";
+import NewAddress from "../pages/dogSignup/NewAddress";
 
 const Router = () => {
+  const Authorization = sessionStorage.getItem("accessToken");
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/welcomePage" element={<WelcomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<SignUp />} />
-        <Route path="/oauth/callback/kakao" element={<Kakao />} />
-        <Route path="/dogSignUp" element={<DogSignUp />} />
-        <Route path="/giveLove" element={<GiveLove />} />
-        <Route path="/getLove" element={<GetLove />} />
-        <Route path="/chattingList" element={<ChattingList />} />
-        <Route path="/chattingdetail" element={<ChattingDetail />} />
-        <Route path="/chatroom" element={<ChatRoom />} />
-        <Route path="/chatwindow" element={<ChatWindow />} />
-        {/* <Route path="/addDog" element={<AddDog />} /> */}
-        {/* <Route path="/editDog" element={<EditDog />} /> */}
-        <Route path="/editUser" element={<EditUser />} />
-        <Route path="/myDog/:id" element={<MyDog />} />
-        <Route path="/address" element={<Address />} />
+        {!Authorization ? (
+          <>
+            <Route path="/" element={<WelcomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signUp" element={<SignUp />} />
+            <Route path="/oauth/callback/kakao" element={<Kakao />} />
+            <Route path="/selectpage" element={<SelectPage />} />
+            <Route path="/dogSignUp" element={<DogSignUp />} />
+            <Route path="/newaddress" element={<NewAddress />} />
+            <Route path="/chattingList" element={<ChattingList />} />
+            <Route path="/home" element={<Home />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/newaddress" element={<NewAddress />} />
+            <Route path="/selectpage" element={<SelectPage />} />
+            <Route path="/dogSignUp" element={<DogSignUp />} />
+            <Route path="/giveLove" element={<GiveLove />} />
+            <Route path="/getLove" element={<GetLove />} />
+            <Route path="/chattingList" element={<ChattingList />} />
+            <Route path="/chattingdetail" element={<ChattingDetail />} />
+            <Route path="/chatroom" element={<ChatRoom />} />
+            <Route path="/mypage" element={<EditUser />} />
+            <Route path="/mypage/editnick" element={<EditNick />} />
+            <Route path="/mypage/editpsw" element={<EditPsw />} />
+            <Route path="/mypage/adddog" element={<AddDog />} />
+            <Route path="/myDog/:id" element={<MyDog />} />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );

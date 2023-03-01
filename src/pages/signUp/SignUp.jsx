@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { __postUser } from "../../redux/modules/userSlice";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { __postUser, __checkId } from "../../redux/modules/userSlice";
+import StartLayout from "../../components/StartLayout";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function SignUp() {
   const [checkpassInput, setcheckpassInput] = useState("");
 
   //정규식
-  const regusername = /^[a-z0-9]{4,8}$/;
+  const regusername = /^[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]{1,20}$/;
   const regEmail =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
   const regPassword = /^(?=.[A-Za-z])(?=.\\d)[A-Za-z\\d@$!%*#?&]{8,15}$/;
@@ -42,9 +43,7 @@ function SignUp() {
     setUser({ ...user, [name]: value });
 
     if (name === "username")
-      !regusername.test(value)
-        ? setusernameInput("소문자 + 숫자 허용 4~8자리입니다.")
-        : setusernameInput("");
+      !regusername.test(value) ? setusernameInput("") : setusernameInput("");
 
     if (name === "email")
       !regEmail.test(value)
@@ -54,8 +53,8 @@ function SignUp() {
     if (name === "password")
       !regPassword.test(value)
         ? setPassInput(
-            `8~15자의 영문 대소문자와 숫자 그리고
-                           특수문자(!@#$%^&*)를 입력해주세요.`
+            `8~15자의 영문과 숫자 그리고 
+             특수문자(!@#$%^&*)를 입력해주세요.`
           )
         : setPassInput("");
     if (name === "check_password")
@@ -84,186 +83,179 @@ function SignUp() {
         password,
       })
     );
-    navigate("/dogSignUp");
+    navigate("/login");
   };
-  console.log(email);
+  const onSubmitUserCheckHandler = (e) => {
+    e.preventDefault();
+    if (email.trim() === "") {
+      return alert("이메일 입력스!");
+    }
+    dispatch(
+      __checkId({
+        email,
+      })
+    );
+  };
 
   return (
-    <Container>
-      <Wrapper>
-        <SignUpBox onSubmit={onSubmitUserHandler}>
-          <TopBox>
-            <div>간편하게 가입하고</div>
-            <div>투개더를 이용해보세요</div>
-          </TopBox>
-
-          <div>
-            <StInput
-              type="text"
-              name="username"
-              value={username}
-              placeholder="아이디를 입력하세요"
-              onChange={onChangeUserHandler}
-            ></StInput>
-          </div>
-          <p id="help-password2" className="help">
-            {usernameInput}
-          </p>
-
-          <div>
-            <StInput
-              type="email"
-              name="email"
-              value={email}
-              placeholder="이메일을 입력해주세요"
-              onChange={onChangeUserHandler}
-            ></StInput>
-          </div>
-          <p id="help-user" className="help">
+    <StartLayout>
+      <form onSubmit={onSubmitUserHandler}>
+        <TopBox>
+          <div>간편하게 가입하고</div>
+          <br />
+          <StP1>투개더를 이용해보세요</StP1>
+        </TopBox>
+        <StDiv>
+          <StP2>이름</StP2>
+          <StInput
+            type="text"
+            name="username"
+            value={username}
+            placeholder="이름을 입력하세요(강아지 이름X)"
+            onChange={onChangeUserHandler}
+          ></StInput>
+        </StDiv>
+        <StP3 id="help-password2" className="help">
+          {usernameInput}
+        </StP3>
+        <StDiv>
+          <StP2>이메일</StP2>
+          <StInput
+            type="email"
+            name="email"
+            value={email}
+            placeholder="이메일을 입력해주세요"
+            onChange={onChangeUserHandler}
+          />
+          <StP3 id="help-user" className="help">
             {emailInput}
-          </p>
+          </StP3>
+        </StDiv>
 
-          <div>
-            <StInput
-              type="password"
-              name="password"
-              value={password}
-              placeholder="비밀번호를 입력하세요"
-              onChange={onChangeUserHandler}
-            ></StInput>
-          </div>
-          <p id="help-password1" className="help">
+        <StDogButton onClick={onSubmitUserCheckHandler}>
+          이메일 중복확인
+        </StDogButton>
+
+        <StDiv>
+          <StP2>비밀번호</StP2>
+          <StInput
+            type="password"
+            name="password"
+            value={password}
+            placeholder="비밀번호를 입력하세요"
+            onChange={onChangeUserHandler}
+          ></StInput>
+          <StP3 id="help-password1" className="help">
             {passInput}
-          </p>
-          <div>
-            <StInput
-              type="password"
-              name="check_password"
-              value={check_password}
-              placeholder="비밀번호 확인해주세요"
-              onChange={onChangeUserHandler}
-            ></StInput>
-          </div>
-          <p id="help-password2" className="help">
+          </StP3>
+        </StDiv>
+
+        <StDiv>
+          <StP2>비밀번호 확인</StP2>
+          <StInput
+            type="password"
+            name="check_password"
+            value={check_password}
+            placeholder="비밀번호 확인해주세요"
+            onChange={onChangeUserHandler}
+          ></StInput>
+          <StP3 id="help-password2" className="help">
             {checkpassInput}
-          </p>
-          <LogInBtn>강아지 설정하기</LogInBtn>
-        </SignUpBox>
-      </Wrapper>
-    </Container>
+          </StP3>
+        </StDiv>
+
+        <StLdButton>강아지 설정하기</StLdButton>
+      </form>
+    </StartLayout>
   );
 }
 
 export default SignUp;
 
-const Container = styled.div`
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 100px;
+const StP1 = styled.div`
+  font-size: 20px;
 `;
-const WhiteBox = styled.div`
-  background-color: white;
-  border: 1px solid rgb(219, 219, 219);
-  border-radius: 10px;
+const StP2 = styled.div`
+  padding-left: 1px;
+  font-weight: 600;
 `;
-const TopBox = styled(WhiteBox)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 35px 40px 25px 40px;
-  margin-bottom: 10px;
-
-  h1 {
-    color: #333333;
-  }
-  button {
-    border: none;
-    width: 130px;
-    height: 30px;
-    border-radius: 10px;
-    background-color: #f56753;
-    color: white;
-    font-weight: 800;
-    font-size: 15px;
-    cursor: pointer;
-  }
-`;
-const Wrapper = styled.div`
-  max-width: 350px;
-  width: 100%;
-`;
-const Separator = styled.div`
-  margin: 10px 0px 30px 0px;
+const StP3 = styled.div`
+  font-size: 12px;
   margin-top: 10px;
-  text-transform: uppercase;
+  width: 250px;
+`;
+const StDiv = styled.div`
+  margin-left: 12px;
+  margin-bottom: 22px;
+`;
+
+const TopBox = styled.div`
   display: flex;
+  flex-direction: column;
+  margin-top: 92px;
+  margin-bottom: 45px;
+  width: 220px;
+  height: 58px;
+  margin-left: 32px;
+  text-align: center;
+`;
+
+const StDogButton = styled.button`
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  div {
-    width: 100%;
-    height: 2px;
-    background-color: rgb(219, 219, 219);
-  }
-  span {
-    margin: 0px 10px;
-    color: #8e8e8e;
-    font-weight: 600;
-  }
-`;
-const SignUpBtn = styled.button`
-  border: none;
-  border-radius: 50px;
-  margin-top: 12px;
-  background-color: gray;
-  color: white;
-  text-align: center;
-  padding: 8px 0px;
+  color: #ffffff;
+  width: 257px;
+  height: 46px;
+  margin-left: 12px;
+  top: 700px;
+  font-size: 16px;
+  /* Main/main */
   font-weight: 600;
-  width: 100%;
-  opacity: gray;
+  background: #2f58ac;
+  border-radius: 60px;
+  margin-bottom: 22px;
 `;
-const LogInBtn = styled.button`
-  border: none;
-  border-radius: 50px;
-  margin-top: 12px;
-  background-color: gray;
-  color: white;
-  text-align: center;
-  padding: 8px 0px;
+const StLdButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  width: 257px;
+  height: 46px;
+  margin-left: 12px;
+  top: 700px;
+  font-size: 16px;
+  /* Main/main */
   font-weight: 600;
-  width: 100%;
-  opacity: gray;
-`;
-const KakaoSignIn = styled.button`
-  border: none;
-  border-radius: 50px;
-  margin-top: 12px;
-  background-color: gray;
-  color: white;
-  text-align: center;
-  padding: 8px 0px;
-  font-weight: 600;
-  width: 100%;
-  opacity: gray;
+  margin-top: 130px;
+  background: #2f58ac;
+  border-radius: 60px;
+  margin-bottom: 22px;
 `;
 const StInput = styled.input`
-  width: 100%;
-  border-radius: 3px;
-  padding: 7px;
-  background-color: #fafafa;
-  border: 0.5px solid;
-  margin-top: 10px;
+  margin-top: 6px;
+  width: 259px;
+  height: 26px;
+
+  background-color: white;
   box-sizing: border-box;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-bottom-style: 1px;
+
   &::placeholder {
+    width: 300px;
+    height: 30px;
+    font-weight: 500;
     font-size: 12px;
+    line-height: 17px;
+
     &:focus {
       border-color: rgb(38, 38, 38);
     }
   }
 `;
-const SignUpBox = styled.form``;
