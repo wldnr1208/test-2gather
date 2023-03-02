@@ -11,7 +11,7 @@ function WelcomePage() {
     <StartLayout>
       <StContainer>
         <StP1>
-          우리 강아지의 <span>산책 매칭</span>
+          우리 강아지f의 <span>산책 매칭</span>
         </StP1>
         <StImg src={whitetogather} />
         <StH1>
