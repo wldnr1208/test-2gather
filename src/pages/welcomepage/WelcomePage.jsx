@@ -15,7 +15,7 @@ function WelcomePage() {
         </StP1>
         <StImg src={whitetogather} />
         <StH1>
-          인근의 <span>강아지 친구와 매칭</span>되어
+          인근의ㄹ <span>강아지 친구와 매칭</span>되어
           <br /> <br />
           <span>산책도, 교류도</span> 해요!!
         </StH1>
