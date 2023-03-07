@@ -35,5 +35,5 @@ const ContainerDiv = styled.div`
   flex-direction: column;
   background-color: white;
   width: 375px;
-  height: 812px;
+  height: 750px;
 `;

@@ -4,13 +4,11 @@ import Header from "../shared/MainHeader";
 import Footer from "../shared/Footer";
 import background from "../assets/img/background.png";
 
-function Layout({ children }) {
+function Layout({ children, title }) {
   return (
     <Container>
       <ContainerDiv>
-        <Header>
-          <h3>좋아요</h3>
-        </Header>
+        <Header title={title} />
         <Content>{children}</Content>
         <FooterWrapper>
           <Footer />
@@ -42,8 +40,7 @@ const ContainerDiv = styled.div`
   justify-content: space-between;
   background-color: white;
   width: 375px;
-  height: 812px;
-  border: 2px solid black;
+  height: 750px;
   border-radius: 30px;
   position: relative;
 `;
