@@ -34,9 +34,6 @@ const ContainerDiv = styled.div`
   align-items: center;
   flex-direction: column;
   background-color: white;
-  color: var(--color-main);
   width: 375px;
-  height: 750px;
-  border: 2px solid black;
-  border-radius: 30px;
+  height: 812px;
 `;
