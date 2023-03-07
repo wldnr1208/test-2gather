@@ -36,7 +36,7 @@ const StContainer = styled.div`
   align-items: center;
   flex-direction: column;
   margin: 0 auto;
-  height: 750px;
+  height: 760px;
   background-image: url(${welecome});
   background-repeat: no-repeat;
   background-size: cover;
@@ -65,8 +65,7 @@ const StP1 = styled.p`
 const StImg = styled.img`
   width: 196.65px;
   height: 107.16px;
-
-  margin-bottom: 308px;
+  margin-bottom: 270px;
 `;
 
 const StH1 = styled.h1`
@@ -77,7 +76,7 @@ const StH1 = styled.h1`
   color: #ffffff;
   font-weight: 200;
   text-align: center;
-  margin-bottom: 185px;
+  margin-bottom: 180px;
   span {
     font-size: 24px;
     font-weight: 700;
